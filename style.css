@@ -466,41 +466,142 @@ button:disabled {
    =================================== */
 @media (max-width: 768px) {
     body {
-        padding: var(--spacing-md);
+        padding: var(--spacing-sm);
+        align-items: flex-start;
+        padding-top: var(--spacing-lg);
     }
 
     .quiz-container {
         padding: var(--spacing-lg);
+        max-width: 100%;
     }
 
     h1 {
         font-size: 1.5rem;
+        line-height: 1.3;
+        word-break: keep-all;
+        overflow-wrap: break-word;
+    }
+
+    .question-box {
+        padding: var(--spacing-lg);
     }
 
     .question-text {
         font-size: 1.125rem;
+        line-height: 1.6;
+    }
+
+    .option-list {
+        gap: var(--spacing-sm);
+    }
+
+    .option-list li {
+        padding: var(--spacing-md) var(--spacing-lg);
+        font-size: 1rem;
+        line-height: 1.5;
     }
 
     button {
         font-size: 1rem;
         padding: var(--spacing-md) var(--spacing-lg);
+        min-height: 48px;
+        /* タップしやすい最小サイズ */
+    }
+
+    #result {
+        padding: var(--spacing-lg);
     }
 
     #result h2 {
         font-size: 2rem;
+        line-height: 1.2;
+    }
+
+    #result p {
+        font-size: 1.125rem;
+    }
+
+    .rationale {
+        font-size: 0.95rem;
+        padding: var(--spacing-md);
+        line-height: 1.7;
     }
 }
 
 @media (max-width: 480px) {
+    body {
+        padding: var(--spacing-xs);
+        padding-top: var(--spacing-md);
+    }
+
+    .quiz-container {
+        padding: var(--spacing-md);
+        border-radius: var(--radius-xl);
+    }
+
     h1 {
         font-size: 1.25rem;
+        margin-bottom: var(--spacing-lg);
+        line-height: 1.4;
+    }
+
+    .question-box {
+        padding: var(--spacing-md);
+        margin-bottom: var(--spacing-lg);
     }
 
     .question-text {
         font-size: 1rem;
+        margin-bottom: var(--spacing-md);
+        line-height: 1.6;
+    }
+
+    .option-list {
+        gap: var(--spacing-xs);
     }
 
     .option-list li {
+        padding: var(--spacing-sm) var(--spacing-md);
+        font-size: 0.95rem;
+        border-radius: var(--radius-md);
+    }
+
+    .option-list li.correct::after,
+    .option-list li.incorrect::after {
+        font-size: 1.25rem;
+        right: var(--spacing-md);
+    }
+
+    button {
+        font-size: 0.95rem;
+        padding: var(--spacing-sm) var(--spacing-md);
+        min-height: 44px;
+        margin-top: var(--spacing-md);
+    }
+
+    #result {
         padding: var(--spacing-md);
+    }
+
+    #result h2 {
+        font-size: 1.75rem;
+        margin-bottom: var(--spacing-md);
+    }
+
+    #result p {
+        font-size: 1rem;
+        margin: var(--spacing-sm) 0;
+    }
+
+    .rationale {
+        font-size: 0.9rem;
+        padding: var(--spacing-sm) var(--spacing-md);
+        margin-top: var(--spacing-md);
+        line-height: 1.7;
+    }
+
+    .rationale strong {
+        font-size: 0.95rem;
     }
 }
