@@ -37,7 +37,7 @@ function startQuiz() {
     resultDiv.style.padding = '0';
     resultDiv.style.backgroundColor = 'transparent';
     resultDiv.style.color = '#333';
-    
+
     currentQuestionIndex = 0;
     score = 0;
     nextButton.textContent = '解答する';
@@ -56,19 +56,22 @@ function showQuestion() {
     }
 
     const q = currentQuiz[currentQuestionIndex];
-    
+
+    // Smooth scroll to top
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+
     // UIの初期化
     isAnswered = false;
     nextButton.textContent = '解答する';
     nextButton.onclick = checkAnswer;
     nextButton.disabled = true;
-    
+
     // 前回表示された解説があれば削除
     const rationale = questionBox.querySelector('.rationale');
     if (rationale) {
         questionBox.removeChild(rationale);
     }
-    
+
     optionsList.innerHTML = ''; // 選択肢をクリア
 
     // 問題文の表示
@@ -79,7 +82,16 @@ function showQuestion() {
         const li = document.createElement('li');
         li.textContent = option;
         li.dataset.index = index;
+        li.setAttribute('role', 'radio');
+        li.setAttribute('aria-checked', 'false');
+        li.setAttribute('tabindex', '0');
         li.addEventListener('click', () => selectOption(li));
+        li.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                selectOption(li);
+            }
+        });
         optionsList.appendChild(li);
     });
 }
@@ -88,14 +100,16 @@ function showQuestion() {
 function selectOption(selectedLi) {
     if (isAnswered) return; // 回答済みの場合は何もしない
 
-    // 全ての選択肢から 'selected' クラスを削除
+    // 全ての選択肢から 'selected' クラスとARIA属性を削除
     document.querySelectorAll('#options-list li').forEach(li => {
         li.classList.remove('selected');
+        li.setAttribute('aria-checked', 'false');
     });
 
-    // 選択された選択肢に 'selected' クラスを追加
+    // 選択された選択肢に 'selected' クラスとARIA属性を追加
     selectedLi.classList.add('selected');
-    
+    selectedLi.setAttribute('aria-checked', 'true');
+
     // 回答ボタンを有効化
     nextButton.disabled = false;
 }
@@ -119,7 +133,7 @@ function checkAnswer() {
     // 結果のフィードバック
     document.querySelectorAll('#options-list li').forEach(li => {
         const index = parseInt(li.dataset.index);
-        
+
         // 全ての選択肢のクリックイベントを無効化
         li.removeEventListener('click', selectOption);
 
@@ -172,9 +186,26 @@ function showResults() {
         <p>テスト対策、お疲れさまでした！</p>
         <button id="restart-button">💪 もう一度挑戦する</button>
     `;
-    
+
     document.getElementById('restart-button').addEventListener('click', startQuiz);
 }
+
+// キーボードナビゲーション
+document.addEventListener('keydown', (e) => {
+    // Enterキーで解答/次へ進む
+    if (e.key === 'Enter' && !nextButton.disabled) {
+        nextButton.click();
+    }
+
+    // 数字キー (1-4) で選択肢を選択
+    if (!isAnswered && e.key >= '1' && e.key <= '4') {
+        const index = parseInt(e.key) - 1;
+        const options = document.querySelectorAll('#options-list li');
+        if (options[index]) {
+            selectOption(options[index]);
+        }
+    }
+});
 
 // クイズの起動
 fetchQuizData();
